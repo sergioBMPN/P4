@@ -68,10 +68,11 @@ class Agent(object):
                 #actualizamos la recompensa por realizar esa accion en ese estado
                 temp = self.ruta.pop()
                 self.mapa[temp[0], temp[1]] = reward + self.gamma * max(self.mapa[state])
+                #arrastramos la recompensa hacia atras en la ruta seguida
                 while (len(self.ruta) > 0):
-                    learningReward = self.gamma * max(self.mapa[temp[0]])
+                    reward = self.gamma * max(self.mapa[temp[0]])
                     temp = self.ruta.pop()
-                    self.mapa[temp[0], temp[1]] = learningReward
+                    self.mapa[temp[0], temp[1]] = reward
         #normal
         else:
             self.mapa[self.current_state][self.accion] = reward + self.gamma * max(self.mapa[state])
@@ -169,7 +170,7 @@ class LostInSpace(object):
 if __name__ == '__main__':
     # Lost in Space
     env = LostInSpace()
-    agent = Agent(env.get_states_size(), env.get_actions_size(),True,0.9,1.1)  # LOS VALORES POR DEFECTO NO TIENE POR QUE SER VÁLIDOS
+    agent = Agent(env.get_states_size(), env.get_actions_size(),False,1)  # LOS VALORES POR DEFECTO NO TIENE POR QUE SER VÁLIDOS
 
     episode_count = 1000  # TODO Modificar si es necesario para estudiar si el agente aprende
     reward = 0

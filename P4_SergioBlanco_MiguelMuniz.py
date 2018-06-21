@@ -57,26 +57,24 @@ class Agent(object):
     def learn(self, state, reward):
         '''
         Crear el proceso de aprendizaje por refuerzo con Q learning, puede ser clásico o inverso
-        '''
+
         # TODO
-        #inverso
-        if self.inverse_learning:
-            #si es la meta
+
+        '''
+        #reverse
+        if self.inverse_learning :
+            self.ruta.append([self.current_state, self.accion])
             if reward == 100:
                 #actualizamos la recompensa por realizar esa accion en ese estado
-                self.mapa[self.current_state,self.accion] = reward + self.gamma * max(self.mapa[state])
-                if len(self.ruta)>0:
-                    self.ruta.reverse()
-                    for tuple in self.ruta:
-                        print(self.mapa[tuple[0],tuple[1]])
-                        self.mapa[tuple[0],tuple[1]]= self.gamma * max(self.mapa[tuple[0]])
-                        print(self.mapa[tuple[0],tuple[1]])
-                        print()
-
-            self.ruta.append([self.current_state, self.accion])
+                temp = self.ruta.pop()
+                self.mapa[temp[0], temp[1]] = reward + self.gamma * max(self.mapa[state])
+                while (len(self.ruta) > 0):
+                    learningReward = self.gamma * max(self.mapa[temp[0]])
+                    temp = self.ruta.pop()
+                    self.mapa[temp[0], temp[1]] = learningReward
         #normal
         else:
-            self.mapa[self.current_state,self.accion] = reward + self.gamma * max(self.mapa[state])
+            self.mapa[self.current_state][self.accion] = reward + self.gamma * max(self.mapa[state])
 
         self.current_state = state
         return
